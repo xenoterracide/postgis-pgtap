@@ -6,16 +6,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        run: |
-          set -x
-          SERVER_ENV=$(echo $GITHUB_REF | cut -f1,2 -d"/" --complement)
-          curl --silent --trace-ascii --fail -XPOST "https://api.github.com/repos/$GITHUB_REPOSITORY/deployments" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.ant-man-preview+json" \
-            --data "{ \"ref\": \"$GITHUB_REF\",\"environment\":\"$SERVER_ENV\", \"auto-merge\":\"false\", \"required_contexts\":[\"build\"] }"
