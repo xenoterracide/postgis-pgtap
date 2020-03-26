@@ -6,42 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: docker compose
-        run: |
-          docker-compose -f docker-compose.${{ matrix.context }}.yml up -d
-          docker ps
-      - name: install liquibase
-        run: |
-          wget --quiet https://github.com/liquibase/liquibase/releases/download/v3.8.6/liquibase-3.8.6.tar.gz
-          wget --quiet https://jdbc.postgresql.org/download/postgresql-42.2.9.jar
-          mkdir -p liquibase
-          tar --extract --file liquibase-*.tar.gz --directory liquibase
-      - name: wait for dbs
-        run: |
-          set -x
-          wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-          chmod +x wait-for-it.sh
-          ./wait-for-it.sh --timeout=60 localhost:5432 || ( docker-compose logs && exit 1)
-          docker pull postgres:alpine
-          isReady() {
-            docker run --network host --rm postgres:alpine pg_isready \
-              --host localhost --dbname briggo_production --username postgres --timeout 30
-          }
-          until isReady
-          do
-            sleep 1
-          done
-      - name: db migration
-        run: |
-          ./liquibase/liquibase --defaultsFile=liquibase-${{ matrix.context }}.properties update \
-          || ( docker-compose logs && exit 1)
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        if: failure() && !contains( github.ref, 'feature' )
-        env:
-          SLACK_COLOR: "#ff0000"
-          SLACK_TITLE: You have failed this project!
-          SLACK_WEBHOOK: ${{ secrets.SLACK_DEV_NOTIFICATIONS_WEBHOOK }}
   deploy:
     needs: build
     runs-on: ubuntu-latest
