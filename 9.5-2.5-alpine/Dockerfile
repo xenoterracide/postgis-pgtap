@@ -13,4 +13,3 @@ RUN make install
 FROM postgis/postgis:9.5-2.5-alpine
 ENV DEST /usr/local/share/postgresql/extension/
 COPY --from=builder $DEST $DEST
-RUN ls -l $DEST
