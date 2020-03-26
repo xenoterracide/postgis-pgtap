@@ -5,7 +5,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        version: [9.5-2.5-alpine]
+        version: [9.5-2.5-alpine, pgprove]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
