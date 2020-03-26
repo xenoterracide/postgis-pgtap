@@ -18,4 +18,4 @@ jobs:
             -H "Content-Type: application/json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.ant-man-preview+json" \
-            --data "{ \"ref\": \"$GITHUB_REF\",\"environment\":\"$SERVER_ENV\", \"auto-merge\":\"false\", \"required_contexts\":[\"build (test)\",\"build (pgtest)\"] }"
+            --data "{ \"ref\": \"$GITHUB_REF\",\"environment\":\"$SERVER_ENV\", \"auto-merge\":\"false\", \"required_contexts\":[\"build\"] }"
