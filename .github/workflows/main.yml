@@ -3,6 +3,12 @@ on: [create, push]
 jobs:
   build:
     timeout-minutes: 5
+    strategy:
+      matrix:
+        version: [9.5-2.5-alpine]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: docker build
+        run: docker build -f ${{ matrix.version }}/Dockerfile
+
