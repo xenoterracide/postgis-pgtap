@@ -6,4 +6,4 @@ FROM alpine:latest
 RUN apk add perl postgresql-client
 ENV DEST /usr/local/lib/perl5/site_perl/
 COPY --from=builder $DEST $DEST
-CMD ['pg_prove']
+CMD ['pg_prove', '--help']
