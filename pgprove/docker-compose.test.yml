@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  sut:
+    build: .
+    command: run_tests.sh
+  briggodb:
+    image: xenoterracide/postgis-pgtap:9.5-2.5-alpine
+    ports:
+      - 5432:5432
+    networks:
+      net:
+        aliases:
+          - nuvola.db
+    environment:
+      POSTGRES_DB: briggo_production
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: DontUseThisPassword
+networks:
+  net:
